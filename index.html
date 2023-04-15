@@ -33,14 +33,14 @@
       import { onValue } from "https://www.gstatic.com/firebasejs/9.6.8/firebase-database.js"
 
       const firebaseConfig = {
-        apiKey: "AIzaSyB1tN0HlspSo67nxBBl2_9u_EwgIjULDSM",
-        authDomain: "glenties-source-data.firebaseapp.com",
-        databaseURL: "https://glenties-source-data-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "glenties-source-data",
-        storageBucket: "glenties-source-data.appspot.com",
-        messagingSenderId: "772277728311",
-        appId: "1:772277728311:web:1ddc6ac76b8e9c75e2fbb2",
-        measurementId: "G-CZ7TYLGS8T"
+        apiKey: "AIzaSyCxcaeGWc3HfkRpAriC1C5k29tjVBJN820",
+        authDomain: "arastelemtry.firebaseapp.com",
+        databaseURL: "https://arastelemtry-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "arastelemtry",
+        storageBucket: "arastelemtry.appspot.com",
+        messagingSenderId: "810724846084",
+        appId: "1:810724846084:web:9825605b1b6b2e28d42351",
+        measurementId: "G-R9RVQ5KFH9"
       };
 
 
@@ -54,312 +54,215 @@
 
       console.log("HERE!!")
 
-    
-  // Get RTU Count
-      const rtuRef = ref(db, 'Telemetry Data/Comms Status/RTU Count');
-      onValue(rtuRef, (snapshot) => {
-        var rtu_data = snapshot.val();
-        console.log(rtu_data);
 
-        //console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("RTU").innerHTML = rtu_data;
-
-      });
       // Get DI_1 Count
-      const i_p1RunRef = ref(db, 'Telemetry Data/Digital Inputs/DI-0 : Pump No1 Run');
-      onValue(i_p1RunRef, (snapshot) => {
-        var i_p1_run_data = snapshot.val();
+      const smsKillRef = ref(db, '/Telemetry Data/SMS Kill Switch/enable');
+      onValue(smsKillRef, (snapshot) => {
+        var smsKill_data = snapshot.val();
 
         //console.log(data);
         console.log(snapshot.val()); 
         //alert("Here is your value: " + data); 
-        document.getElementById("I-p1Run").innerHTML = i_p1_run_data;
+        //document.getElementById("SMS_KillSw").innerHTML = smsKill_data;
+
+        if (smsKill_data == true) {
+          //console.log("Running")
+          document.getElementById("SMS_KillSw").innerHTML = "Active";
+        } else if (smsKill_data == false) {
+          //console.log("Idle")
+          document.getElementById("SMS_KillSw").innerHTML = "Disabled";
+        } else{
+          //console.log("Wrong data type")
+          document.getElementById("SMS_KillSw").innerHTML = "Data Loss";
+        }
+
+      });
+
+    
+  
+      // Get DI_1 Count
+      const mainsRef = ref(db, '/Telemetry Data/IO/Mains OK');
+      onValue(mainsRef, (snapshot) => {
+        var mains_data = snapshot.val();
+
+        //console.log(data);
+        console.log(snapshot.val()); 
+        //alert("Here is your value: " + data); 
+        document.getElementById("I-1").innerHTML = mains_data;
 
         //console.log(typeof i_p1_run_data)
         //console.log(typeof i_p1_run_ref)
-        if (i_p1_run_data == true) {
+        if (mains_data == true) {
           //console.log("Running")
-          document.getElementById("p1_run_status").innerHTML = "Running";
-        } else if (i_p1_run_data == false) {
+          document.getElementById("I1_status").innerHTML = "OK";
+        } else if (mains_data == false) {
           //console.log("Idle")
-          document.getElementById("p1_run_status").innerHTML = "Stopped";
+          document.getElementById("I1_status").innerHTML = "Power Outage";
         } else{
           //console.log("Wrong data type")
-          document.getElementById("p1_run_status").innerHTML = "Data Loss";
+          document.getElementById("I1_status").innerHTML = "Data Loss";
         }
 
       });
 
       // Get DI_1 Count
-      const i_p1TripRef = ref(db, 'Telemetry Data/Digital Inputs/DI-1 : Pump No1 Trip');
+      const i_p1TripRef = ref(db, '/Telemetry Data/IO/OL1 Trip');
       onValue(i_p1TripRef, (snapshot) => {
         var i_p1_trip_data = snapshot.val();
         //console.log(data);
         console.log(snapshot.val()); 
         //alert("Here is your value: " + data); 
-        document.getElementById("I-p1Trip").innerHTML = i_p1_trip_data;
+        document.getElementById("I-2").innerHTML = i_p1_trip_data;
 
-        if (i_p1_trip_data == true) {
+        if (i_p1_trip_data == false) {
           //console.log("Running")
-          document.getElementById("p1_trip_status").innerHTML = "Tripped";
-        } else if (i_p1_trip_data == false) {
+          document.getElementById("I2_status").innerHTML = "Tripped";
+        } else if (i_p1_trip_data == true) {
           //console.log("Idle")
-          document.getElementById("p1_trip_status").innerHTML = "Healthy";
+          document.getElementById("I2_status").innerHTML = "Healthy";
         } else{
           //console.log("Wrong data type")
-          document.getElementById("p1_trip_status").innerHTML = "Data Loss";
+          document.getElementById("I2_status").innerHTML = "Data Loss";
         }
       });
 
 
       // Get DI_1 Count
-      const i_p2RunRef = ref(db, 'Telemetry Data/Digital Inputs/DI-2 : Pump House Door');
+      const i_p2RunRef = ref(db, '/Telemetry Data/IO/OL2 Trip');
       onValue(i_p2RunRef, (snapshot) => {
         var i_p2_run_data = snapshot.val();
         //console.log(data);
         console.log(snapshot.val()); 
         //alert("Here is your value: " + data); 
-        document.getElementById("I-p2Run").innerHTML = i_p2_run_data;
+        document.getElementById("I-3").innerHTML = i_p2_run_data;
 
-        if (i_p2_run_data == true) {
+        if (i_p2_run_data == false) {
           //console.log("Running")
-          document.getElementById("p2_run_status").innerHTML = "Closed";
-        } else if (i_p2_run_data == false) {
+          document.getElementById("I3_status").innerHTML = "Tripped";
+        } else if (i_p2_run_data == true) {
           //console.log("Idle")
-          document.getElementById("p2_run_status").innerHTML = "Opened";
+          document.getElementById("I3_status").innerHTML = "Healthy";
         } else{
           //console.log("Wrong data type")
-          document.getElementById("p2_run_status").innerHTML = "Data Loss";
+          document.getElementById("I3_status").innerHTML = "Data Loss";
         }
       });
 
       // Get DI_1 Count
-      const i_p2TripRef = ref(db, 'Telemetry Data/Digital Inputs/DI-3 : Pump No2 Trip');
+      const i_p2TripRef = ref(db, '/Telemetry Data/IO/OL3 Trip');
       onValue(i_p2TripRef, (snapshot) => {
         var i_p2_trip_data = snapshot.val();
         //console.log(data);
         console.log(snapshot.val()); 
         //alert("Here is your value: " + data); 
-        document.getElementById("I-p2Trip").innerHTML = i_p2_trip_data;
+        document.getElementById("I-4").innerHTML = i_p2_trip_data;
 
-        if (i_p2_trip_data == true) {
+        if (i_p2_trip_data == false) {
           //console.log("Running")
-          document.getElementById("p2_trip_status").innerHTML = "Closed";
-        } else if (i_p2_trip_data == false) {
+          document.getElementById("I4_status").innerHTML = "Tripped";
+        } else if (i_p2_trip_data == true) {
           //console.log("Idle")
-          document.getElementById("p2_trip_status").innerHTML = "Opened";
+          document.getElementById("I4_status").innerHTML = "Healthy";
         } else{
           //console.log("Wrong data type")
-          document.getElementById("p2_trip_status").innerHTML = "Data Loss";
+          document.getElementById("I4_status").innerHTML = "Data Loss";
         }
       });
 
       // Get DI_1 Count
-      const pfrRef = ref(db, 'Telemetry Data/Digital Inputs/DI-4 : Phase Fail Relay (true = OK)');
+      const pfrRef = ref(db, '/Telemetry Data/IO/MCB1 Trip');
       onValue(pfrRef, (snapshot) => {
         var pfrdata = snapshot.val();
         //console.log(data);
         console.log(snapshot.val()); 
         //alert("Here is your value: " + data); 
-        document.getElementById("I-pfr").innerHTML = pfrdata;
+        document.getElementById("I-5").innerHTML = pfrdata;
 
-        if (pfrdata == true) {
+        if (pfrdata == false) {
           //console.log("Running")
-          document.getElementById("pfr_status").innerHTML = "Healthy";
-        } else if (pfrdata == false) {
+          document.getElementById("I5_status").innerHTML = "Tripped";
+        } else if (pfrdata == true) {
           //console.log("Idle")
-          document.getElementById("pfr_status").innerHTML = "Fault";
+          document.getElementById("I5_status").innerHTML = "Healthy";
         } else{
           //console.log("Wrong data type")
-          document.getElementById("pfr_status").innerHTML = "Data Loss";
+          document.getElementById("I5_status").innerHTML = "Data Loss";
         }
       });
 
 
       // Get DI_1 Count
-      const p1SWRef = ref(db, 'Telemetry Data/Digital Inputs/DI-6 : Pump No2 Enabled');
+      const p1SWRef = ref(db, '/Telemetry Data/IO/MCB2 Trip');
       onValue(p1SWRef, (snapshot) => {
         var p1SWdata = snapshot.val();
         //console.log(data);
         console.log(snapshot.val()); 
         //alert("Here is your value: " + data); 
-        document.getElementById("I-p1SW").innerHTML = p1SWdata;
+        document.getElementById("I-6").innerHTML = p1SWdata;
 
-        if (p1SWdata == true) {
+        if (p1SWdata == false) {
           //console.log("Running")
-          document.getElementById("p1SW_state").innerHTML = "Enabled";
-        } else if (p1SWdata == false) {
+          document.getElementById("I6_status").innerHTML = "Tripped";
+        } else if (p1SWdata == true) {
           //console.log("Idle")
-          document.getElementById("p1SW_state").innerHTML = "Disabled";
+          document.getElementById("I6_status").innerHTML = "Healthy";
         } else{
           //console.log("Wrong data type")
-          document.getElementById("p1SW_state").innerHTML = "Data Loss";
+          document.getElementById("I6_status").innerHTML = "Data Loss";
         }
 
       });
 
       // Get DI_1 Count
-      const p2SWRef = ref(db, 'Telemetry Data/Digital Inputs/DI-6 : Pump No2 Enabled');
+      const p2SWRef = ref(db, '/Telemetry Data/IO/MCB3 Trip');
       onValue(p2SWRef, (snapshot) => {
         var p2SWdata = snapshot.val();
         //console.log(data);
         console.log(snapshot.val()); 
         //alert("Here is your value: " + data); 
-        document.getElementById("I-p2SW").innerHTML = p2SWdata;
+        document.getElementById("I-7").innerHTML = p2SWdata;
 
-        if (p2SWdata == true) {
+        if (p2SWdata == false) {
           //console.log("Running")
-          document.getElementById("p2SW_state").innerHTML = "Closed";
-        } else if (p2SWdata == false) {
+          document.getElementById("I7_status").innerHTML = "Tripped";
+        } else if (p2SWdata == true) {
           //console.log("Idle")
-          document.getElementById("p2SW_state").innerHTML = "Opened";
+          document.getElementById("I7_status").innerHTML = "Healthy";
         } else{
           //console.log("Wrong data type")
-          document.getElementById("p2SW_state").innerHTML = "Data Loss";
+          document.getElementById("I7_status").innerHTML = "Data Loss";
         }
       });
 
 
       // Get DI_1 Count
-      const floatRef = ref(db, 'Telemetry Data/Digital Inputs/DI-7 : Pump No2 Enabled');
+      const floatRef = ref(db, '/Telemetry Data/IO/MCB4 Trip');
       onValue(floatRef, (snapshot) => {
         var floatdata = snapshot.val();
         //console.log(data);
         console.log(snapshot.val()); 
         //alert("Here is your value: " + data); 
-        document.getElementById("I-float").innerHTML = floatdata;
+        document.getElementById("I-8").innerHTML = floatdata;
 
-        if (floatdata == true) {
+        if (floatdata == false) {
           //console.log("Running")
-          document.getElementById("float_state").innerHTML = "Active";
-        } else if (floatdata == false) {
+          document.getElementById("I8_status").innerHTML = "Tripped";
+        } else if (floatdata == true) {
           //console.log("Idle")
-          document.getElementById("float_state").innerHTML = "De-Active";
+          document.getElementById("I8_status").innerHTML = "Healthy";
         } else{
           //console.log("Wrong data type")
-          document.getElementById("float_state").innerHTML = "Data Loss";
+          document.getElementById("I8_status").innerHTML = "Data Loss";
         }
       });
 
-      // Get RTU Count
-      const start1Ref = ref(db, 'Telemetry Data/Digital Outputs/DO-0 : Pump No1 Start');
-      onValue(start1Ref, (snapshot) => {
-        var start1_data = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("start1").innerHTML = start1_data;
-      });
-
-      // Get DI_1 Count
-      const start2Ref = ref(db, 'Telemetry Data/Digital Outputs/DO-1 : Pump No1 Start');
-      onValue(start2Ref, (snapshot) => {
-        var start2_data = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("start2").innerHTML = start2_data;
-      });
-
-      // Get DI_1 Count
-      const O_p1RunRef = ref(db, 'Telemetry Data/Digital Outputs/DO-2 : Pump No1 Run Lamp');
-      onValue(O_p1RunRef, (snapshot) => {
-        var O_p1Run_data = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("O-p1Run").innerHTML = O_p1Run_data;
-      });
+      
 
 
-      // Get DI_1 Count
-      const O_p1TripRef = ref(db, 'Telemetry Data/Digital Outputs/DO-3 : Pump No1 Trip Lamp');
-      onValue(O_p1TripRef, (snapshot) => {
-        var O_p1_trip_data = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("O-p1Trip").innerHTML = O_p1_trip_data;
-      });
-
-       // Get DI_1 Count
-      const O_p2RunRef = ref(db, 'Telemetry Data/Digital Outputs/DO-4 : Pump No2 Run Lamp');
-      onValue(O_p2RunRef, (snapshot) => {
-        var O_p2Run_data = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("O-p2Run").innerHTML = O_p2Run_data;
-
-      });
-
-
-      // Get DI_1 Count
-      const O_p2TripRef = ref(db, 'Telemetry Data/Digital Outputs/DO-5 : Pump No2 Trip Lamp');
-      onValue(O_p2TripRef, (snapshot) => {
-        var O_p2_trip_data = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("O-p2Trip").innerHTML = O_p2_trip_data;
-      });
-
-      // Get DI_1 Count
-      const mainsRef = ref(db, 'Telemetry Data/Digital Outputs/DO-6 : Mains Healthy Lamp');
-      onValue(mainsRef, (snapshot) => {
-        var mainsdata = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("O-Mains").innerHTML = mainsdata;
-      });
-
-
-      // Get DI_1 Count
-      const spareRef = ref(db, 'Telemetry Data/Digital Outputs/DO-7 : SPARE');
-      onValue(spareRef, (snapshot) => {
-        var sparedata = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("O-Spare").innerHTML = sparedata;
-
-      });
-
-      // Get DI_1 Count
-      const pRef = ref(db, 'Telemetry Data/Analog Inputs/AI-0 : Pressure');
-      onValue(pRef, (snapshot) => {
-        var pdata = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("AI-pressure").innerHTML = pdata;
-      });
-
-
-      // Get DI_1 Count
-      const lRef = ref(db, 'Telemetry Data/Analog Inputs/AI-1 : Sump Level');
-      onValue(lRef, (snapshot) => {
-        var ldata = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("AI-level").innerHTML = ldata;
-      });
-
-      // Get DI_1 Count
-      const dRef = ref(db, 'Telemetry Data/Analog Inputs/AI-2 : Diesel Tank Level');
-      onValue(dRef, (snapshot) => {
-        var ddata = snapshot.val();
-        //console.log(data);
-        console.log(snapshot.val()); 
-        //alert("Here is your value: " + data); 
-        document.getElementById("AI-dlevel").innerHTML = ddata;
-      });
+      
 
       // Get Time
-      const TRef = ref(db, 'Telemetry Data/Time Data/Time Stamp');
+      const TRef = ref(db, '/Telemetry Data/Time Data/Time Stamp');
       onValue(TRef, (snapshot) => {
         var Tdata = snapshot.val();
         //console.log(data);
@@ -370,7 +273,7 @@
 
 
       function msg() {
-        alert("User Message!!\nTest SMS has been sent to admin phone list.");
+        alert("SMS has been sent to admin phone list.\nManual SMS will only work once every 1 minute..");
 
       };
 
@@ -385,9 +288,33 @@
         setTimeout(() => { name = 0;
           set(ref(db, 'Buttons/Execute'), {
           value : name
-        }); }, 7000);
+        }); }, 100);
 
       };
+
+      function toggleSMS(){
+
+        // store the name var to 1
+        name = 1;
+        // write the "1" value to the database
+        set(ref(db, 'Buttons/KillSw'), {
+          value : name
+        });
+        // start a countdown timer of 7 seconds before resetting the run state back to 0
+        setTimeout(() => { name = 0;
+          set(ref(db, 'Buttons/KillSw'), {
+          value : name
+        }); }, 100);
+
+        
+
+
+
+        
+
+          
+
+      }
 
       
 
@@ -407,6 +334,13 @@
 
           toggle();
           msg();
+          
+      });
+
+      smsKillBtn.addEventListener('click', function() {
+
+          toggleSMS();
+          
           
       });
 
@@ -434,10 +368,10 @@
             <a class="link link--nav" href="#projects">overview</a>
           </li>
           <li class="nav__list-item">
-            <a class="link link--nav" href="#skills">Camera</a>
+            <a class="link link--nav" href="#skills">raw io</a>
           </li>
           <li class="nav__list-item">
-            <a class="link link--nav" href="#contact">links</a>
+            <a class="link link--nav" href="#contact">sms control</a>
           </li>
         </ul>
 
@@ -462,7 +396,7 @@
         <h1><span class="about__name">Aras O Domhaill</span></h1>
         <h2 class="about__role">Web Telemetry</h2>
         <p class="about__desc">
-          System developed to allow real-time monitoring of Lough Anna pumping station telemetry data. Allows users to quickly visualise communication status, IO states, process variables. Live stream of the on-site security camera available through the RING app. System is accompanied by a SMS alert system to highlight operational events & security events such as door opening events to the relevant users.
+          System ..............
         </p>
 
         
@@ -483,153 +417,117 @@
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
-            <p>Pump Status : <span id="p1_run_status"></span></p>
-            <p>Pump Switch : <span id="p1SW_state"></span></p>
-            <p>Pump Condition : <span id="p1_trip_status"></span></p>
+            <p>Pump No.1 Status : <span id="I2_status"></span></p>
+            <p>Pump No.2 Status : <span id="I3_status"></span></p>
+            <p>Blower Status : <span id="I4_status"></span></p>
 
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             
 
-            <p>Pump House Door : <span id="p2_run_status"></span></p>
-            <p>Generator House Door : <span id="p2SW_state"></span></p>
-            <p>Diesel Tank Door : <span id="p2_trip_status"></span></p>
+            <p>MCB No.1 : <span id="I5_status"></span></p>
+            <p>MCB No.2 : <span id="I6_status"></span></p>
+            <p>MCB No.3 : <span id="I7_status"></span></p>
+            <p>MCB No.4 : <span id="I8_status"></span></p>
 
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
-            <p>Mains Supply : <span id="pfr_status"></span></p>
+            <p>Mains Supply : <span id="I1_status"></span></p>
 
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
-            <p>Line Pressure (Bar) : <span id="AI-pressure"></span></p>
-            <p>Pump Sump Level (Metre) : <span id="AI-level"></span></p>
-            <p>Diesel Tank Level (Metre) : <span id="AI-dlevel"></span></p>
+            <p>SMS System : <span id="SMS_KillSw"></span></p>
+            
 
 
 
           </div>
-          <div class="project">
-            <h3>Comms RTU</h3>
-            <p class="project__description">
-              Heartbeat indictates communication in a healthy state.
-              If this value is frozen - Comms has been interupted.
-            </p>
-
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-            
-            <ul class="project__stack">
-              <li class="project__stack-item">RTU Count</span></li>
-            </ul>
-            <p>Value :  <span id="RTU"></span>
-            </p>
-
-
-
-            
-
-          </div>
+          
       </section>
 
       <!-- Projects -->
       <section id="projects" class="section projects">
-        <h2 class="section__title">Kunbus Controller I/O Status</h2>
+        <h2 class="section__title">Raw Controller I/O Status</h2>
 
         <div class="projects__grid">
           <div class="project">
             <h3>Digital Inputs</h3>
             <p class="project__description">
-              Digital input states - 
+              1 = OK || 0 = Fault
             </p>
 
             <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
             
 
-            <p>DI-0 : Pump No.2 Run:  <span id="I-p1Run"></span>
+            <p>DI-1 : Mains OK:  <span id="I-1"></span>
             </p>
-            <p>DI-1 : Pump No.2 Trip:  <span id="I-p1Trip"></span>
+            <p>DI-2 : Pump No.1 Trip:  <span id="I-2"></span>
             </p>
-             <p>DI-2 : Pump House Door:  <span id="I-p2Run"></span>
+             <p>DI-3 : Pump No.2 Trip:  <span id="I-3"></span>
             </p>
-            <p>DI-3 : Generator House Door:  <span id="I-p2Trip"></span>
+            <p>DI-4 : Blower Trip:  <span id="I-4"></span>
             </p>
-             <p>DI-4 : Phase Fail Relay:  <span id="I-pfr"></span>
+             <p>DI-5 : MCB No.1 Trip:  <span id="I-5"></span>
             </p>
-            <p>DI-5 : Pump No.1 Enabled:  <span id="I-p1SW"></span>
+            <p>DI-6 : MCB No.2 Trip:  <span id="I-6"></span>
             </p>
-             <p>DI-6 : Diesel House Door:  <span id="I-p2SW"></span>
+             <p>DI-7 : MCB No.3 Trip:  <span id="I-7"></span>
             </p>
-            <p>DI-7 : Pump No.2 Enabled:  <span id="I-float"></span>
+            <p>DI-8 : MCB No.4 Trip:  <span id="I-8"></span>
             </p>
             
           </div>
 
-          <div class="project">
-            <h3>Digital Outputs</h3>
-            <p class="project__description">
-              Digital output states - 
-            </p>
-
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-            
-
-            <p>DO-0 : Pump No.1 Start Lamp:  <span id="start1"></span>
-            </p>
-            <p>DO-1 : Pump No.1 Start Lamp:  <span id="start2"></span>
-            </p>
-             <p>DO-2 : Pump No.1 Run Lamp:  <span id="O-p1Run"></span>
-            </p>
-            <p>DO-3 : Pump No.1 Trip Lamp:  <span id="O-p1Trip"></span>
-            </p>
-             <p>DO-4 : Pump No.2 Run Lamp:  <span id="O-p2Run"></span>
-            </p>
-            <p>DO-5 : Pump No.2 Trip Lamp:  <span id="O-p2Trip"></span>
-            </p>
-             <p>DO-6 : Mains Healthy Lamp:  <span id="O-Mains"></span>
-            </p>
-            <p>DO-7 : SPARE:  <span id="O-Spare"></span>
-            </p>
-
-            
-          </div>
+          
         </div>
       </section>
 
 
 
-      <!-- Skills -->
-      <section class="section skills" id="skills">
-        <h2 class="section__title">IP Camera</h2>
-        <ul class="skills__list">
-          
-          <a href="https://ring.com/users/sign_in">
-          <span class="btn btn--outline">RING APP</span>
-          </a>
-        </ul>
-      </section>
+      
 
       <!-- Contact -->
       <section class="section contact center" id="contact">
-        <h2 class="section__title">Links</h2>
+        
+        <h2 class="section__title">SMS Control</h2>
 
+          <button id="timeBtn" class="btn btn--outline" >manual SMS</button>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <button id="smsKillBtn" class="btn btn--outline">SMS on/off</button>
 
-        <a href="mailto:info@maec.ie">
-          <span class="btn btn--outline">Email</span>
-        </a>
-
-        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-
-        <h2 class="section__title">SMS</h2>
-
-          <button id="timeBtn" class="btn btn--outline" onclick="msg()">Test SMS System</button>
+          
           <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
           <p>SMS Alarm Number : +1 (920) 528-5256</p>
 
 
         
         <div class="about__contact center">
+
+      <section id="projects" class="section projects">
+        <h2 class="section__title">Raw Controller I/O Status</h2>
+
+        <div class="projects__grid">
+          <div class="project">
+            <h3>Digital Inputs</h3>
+            <p class="project__description">
+              1 = OK || 0 = Fault
+            </p>
+
+            <p>SMS System : <span id="SMS_KillSw"></span></p>
+            
+            
+            
+          </div>
+
+          
+        </div>
+      </section>
+
+
+
+
           
         </div>
       </div>
@@ -644,6 +542,8 @@
       >
         Engineer : Jonathan Logue
       </a>
+      <p>Last Update TimeStamp:  <span id="TimeStamp"></span>
+            </p>
     </footer>
 
     <div class="scroll-container">
