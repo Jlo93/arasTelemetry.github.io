@@ -255,10 +255,6 @@
           document.getElementById("I8_status").innerHTML = "Data Loss";
         }
       });
-
-      
-
-
       
 
       // Get Time
@@ -271,9 +267,27 @@
         document.getElementById("TimeStamp").innerHTML = Tdata;
       });
 
+      // Get Time
+      const T2Ref = ref(db, '/Telemetry Data/Time Data/Restart Time Stamp');
+      onValue(T2Ref, (snapshot) => {
+        var T2data = snapshot.val();
+        //console.log(data);
+        console.log(snapshot.val()); 
+        //alert("Here is your value: " + data); 
+        document.getElementById("RestartTimeStamp").innerHTML = T2data;
+      });
+
 
       function msg() {
-        alert("SMS has been sent to admin phone list.\nManual SMS will only work once every 1 minute..");
+        alert("SMS has been sent to system contact list.\nManual SMS button will only work once every 1 minute.");
+
+      };
+      function msg2() {
+        alert("SMS system status will be toggled.\nSMS on/off button will only work once every 15 seconds.");
+
+      };
+      function msg3() {
+        alert("System data will be updated. Check for change in Last Update TimeStamp value.\nManual data update button will only work once every 1 minute.");
 
       };
 
@@ -288,7 +302,7 @@
         setTimeout(() => { name = 0;
           set(ref(db, 'Buttons/Execute'), {
           value : name
-        }); }, 100);
+        }); }, 1000);
 
       };
 
@@ -304,14 +318,25 @@
         setTimeout(() => { name = 0;
           set(ref(db, 'Buttons/KillSw'), {
           value : name
-        }); }, 100);
+        }); }, 1000);
+          
 
-        
+      }
 
 
+      function dataToggle(){
 
-        
-
+        // store the name var to 1
+        name = 1;
+        // write the "1" value to the database
+        set(ref(db, 'Buttons/dataToggle'), {
+          value : name
+        });
+        // start a countdown timer of 7 seconds before resetting the run state back to 0
+        setTimeout(() => { name = 0;
+          set(ref(db, 'Buttons/dataToggle'), {
+          value : name
+        }); }, 1000);
           
 
       }
@@ -331,17 +356,19 @@
       
       
       timeBtn.addEventListener('click', function() {
-
-          toggle();
           msg();
+          toggle();
           
       });
 
       smsKillBtn.addEventListener('click', function() {
-
+          msg2();
           toggleSMS();
-          
-          
+      });
+
+      dataBtn.addEventListener('click', function() {
+          msg3();
+          dataToggle();
       });
 
     
@@ -368,10 +395,10 @@
             <a class="link link--nav" href="#projects">overview</a>
           </li>
           <li class="nav__list-item">
-            <a class="link link--nav" href="#skills">raw io</a>
+            <a class="link link--nav" href="#contact">sms control</a>
           </li>
           <li class="nav__list-item">
-            <a class="link link--nav" href="#contact">sms control</a>
+            <a class="link link--nav" href="#raw">raw io</a>
           </li>
         </ul>
 
@@ -395,27 +422,22 @@
 
         <h1><span class="about__name">Aras O Domhaill</span></h1>
         <h2 class="about__role">Web Telemetry</h2>
-        <p class="about__desc">
-          System ..............
+        <h2 class="about__role">Overview</h2>
+        
+        <p>
+          View Real-Time Data, hosting updated hourly.
         </p>
-
         
       </div>
 
       <!-- Projects -->
       <section id="projects" class="section projects">
-        <h2 class="section__title">Overview</h2>
+        
+
 
         <div class="projects__grid">
 
           <div class="project">
-            <h3>Quick Glance </h3>
-            <p class="project__description">
-              Critical Process variables for quick inspection. 
-            </p>
-
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
 
             <p>Pump No.1 Status : <span id="I2_status"></span></p>
             <p>Pump No.2 Status : <span id="I3_status"></span></p>
@@ -447,12 +469,69 @@
           
       </section>
 
+
+      <!-- Contact -->
+      <section class="section contact center" id="contact">
+        
+        <h2 class="section__title">SMS Control</h2>
+        <p>
+          Using the buttons, trigger control actions
+        </p>
+        <p>
+           to check system status Check the SMS system by manually
+        </p>
+        <p>triggering an SMS, Enable or disable the SMS system,
+        </p>
+        <p>or perfrom a manual data update.
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+        </p>
+
+
+          <button id="timeBtn" class="btn btn--outline" >manual SMS</button>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <button id="smsKillBtn" class="btn btn--outline">SMS on/off</button>
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <button id="dataBtn" class="btn btn--outline">manual data update</button>
+
+          
+          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+          <p>SMS Alarm Number : +1 (920) 528-5256</p>
+
+
+        
+        <div class="about__contact center">
+
+      
+
+
       <!-- Projects -->
-      <section id="projects" class="section projects">
+      <section id="raw" class="section projects">
         <h2 class="section__title">Raw Controller I/O Status</h2>
+
+        <p>
+          Raw IO - Shows the raw data being inputted to the system
+        </p>
+        <p>along with reboot time stamp & last data update time stamp.</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
 
         <div class="projects__grid">
           <div class="project">
+            
+
+
+            <h3>Controller Health</h3>
+            
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+            
+            <p>Last Reboot TimeStamp:  <span id="RestartTimeStamp"></span></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            
+            <p>Last Update TimeStamp:  <span id="TimeStamp"></span></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+
             <h3>Digital Inputs</h3>
             <p class="project__description">
               1 = OK || 0 = Fault
@@ -486,47 +565,6 @@
 
 
 
-      
-
-      <!-- Contact -->
-      <section class="section contact center" id="contact">
-        
-        <h2 class="section__title">SMS Control</h2>
-
-          <button id="timeBtn" class="btn btn--outline" >manual SMS</button>
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-          <button id="smsKillBtn" class="btn btn--outline">SMS on/off</button>
-
-          
-          <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
-          <p>SMS Alarm Number : +1 (920) 528-5256</p>
-
-
-        
-        <div class="about__contact center">
-
-      <section id="projects" class="section projects">
-        <h2 class="section__title">Raw Controller I/O Status</h2>
-
-        <div class="projects__grid">
-          <div class="project">
-            <h3>Digital Inputs</h3>
-            <p class="project__description">
-              1 = OK || 0 = Fault
-            </p>
-
-            <p>SMS System : <span id="SMS_KillSw"></span></p>
-            
-            
-            
-          </div>
-
-          
-        </div>
-      </section>
-
-
-
 
           
         </div>
@@ -542,8 +580,7 @@
       >
         Engineer : Jonathan Logue
       </a>
-      <p>Last Update TimeStamp:  <span id="TimeStamp"></span>
-            </p>
+      
     </footer>
 
     <div class="scroll-container">
